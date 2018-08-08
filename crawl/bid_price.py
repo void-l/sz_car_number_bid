@@ -1,6 +1,8 @@
 # -*- coding=utf-8 -*-
 import urllib2
 from prettyprint import pp
+from bs4 import BeautifulSoup
+import re
 
 
 def get_page_content(url):
@@ -9,7 +11,6 @@ def get_page_content(url):
 
 
 def parse_content(content):
-    from bs4 import BeautifulSoup
     soup = BeautifulSoup(content, 'html.parser')
     # print soup.prettify()
     main_content = soup.find("div", class_="blist")
@@ -22,7 +23,6 @@ def parse_content(content):
 
 
 def extract_data(items):
-    import re
     datas = []
     for item in items:
         title = item['title']
@@ -41,6 +41,34 @@ def parse_page(page):
     return extract_data(items)
 
 
+def parse_content(url):
+    content = get_page_content(url)
+
+    print "aaa"
+
+    soup = BeautifulSoup(content, 'html.parser')
+    main = soup.find('div', class_='details').get_text()
+
+    offer_price = re.search(u'两次平均报价分别为个人(\d+)元、单位(\d+)元；个人(\d+)元、单位(\d+)元。', main)
+    deal_price_personal = re.search(u'本期个人竞价成交结果：最低成交价(\d+)元、平均成交价(\d+)元/个', main)
+    deal_price_company = re.search(u'单位竞价成交结果：最低成交价(\d+)元，平均成交价(\d+)元/个', main)
+
+    return {'offer_price_personal0': offer_price.group(1),
+            'offer_price_personal1': offer_price.group(3),
+            'offer_price_company0': offer_price.group(2),
+            'offer_price_company1': offer_price.group(4),
+            'deal_min_price_personal': deal_price_personal.group(1),
+            'deal_avg_price_personal': deal_price_personal.group(2),
+            'deal_min_price_company': deal_price_company.group(1),
+            'deal_avg_price_company': deal_price_company.group(2)
+            }
+
+
 if __name__ == "__main__":
-    start_page = "http://xqctk.sztb.gov.cn/gbl/index.html"
-    pp(parse_page(start_page))
+    ''' parse page test '''
+    # start_page = "http://xqctk.sztb.gov.cn/gbl/index.html"
+    # pp(parse_page(start_page))
+
+    ''' parse content test '''
+    url = "http://xqctk.sztb.gov.cn/gbl/20180725/1532506636656_1.html"
+    pp(parse_content(url))
