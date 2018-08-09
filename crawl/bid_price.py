@@ -41,7 +41,7 @@ def parse_page(page):
     return extract_data(items)
 
 
-def parse_content(url):
+def parse_price(url):
     content = get_page_content(url)
 
     print "aaa"
@@ -66,9 +66,9 @@ def parse_content(url):
 
 if __name__ == "__main__":
     ''' parse page test '''
-    # start_page = "http://xqctk.sztb.gov.cn/gbl/index.html"
-    # pp(parse_page(start_page))
+    start_page = "http://xqctk.sztb.gov.cn/gbl/index.html"
+    pp(parse_page(start_page))
 
     ''' parse content test '''
     url = "http://xqctk.sztb.gov.cn/gbl/20180725/1532506636656_1.html"
-    pp(parse_content(url))
+    pp(parse_price(url))
