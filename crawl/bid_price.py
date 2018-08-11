@@ -41,17 +41,22 @@ def parse_page(page):
 
 def parse_price(url):
     print 'start resolve price', url
-    content = get_page_content(url)
+    try:
+        content = get_page_content(url)
+    except Exception as e:
+        print 'error', url
+        print e.message
+        return
 
     soup = BeautifulSoup(content, 'html.parser')
-    main = soup.find('div', class_='details').get_text()
+    main = soup.find('div', class_='details').get_text().replace(' ', '')
 
-    offer_price = re.search(u'两次平均报价分别为个人(\d+)元、单位(\d+)元；个人(\d+)元、单位(\d+)元。', main)
-    deal_price_personal = re.search(u'本期个人竞价[的]?成交结果：最低成交价(\d+)元、平均成交价(\d+)元/个', main)
-    deal_price_company = re.search(u'单位竞价成交结果：最低成交价(\d+)元[，|、]平均成交价(\d+)元/个', main)
+    offer_price = re.search(u'两次平均报价分别为[：]*个人\W*(\d+)\W*元、单位\W*(\d+)\W*元；个人\W*(\d+)\W*元、单位\W*(\d+)\W*元', main)
+    deal_price_personal = re.search(u'本期个人竞价[的]?成交结果：最低成交价(\d+)元、平均成交价\W*(\d+)\W*元/个', main)
+    deal_price_company = re.search(u'单位竞价成交结果：最低成交价\W*(\d+)\W*元[，、]平均成交价\W*(\d+)\W*元/个', main)
 
-    deal_min_price = re.search(u'本期竞价的最低成交价为个人(\d+)元、单位(\d+)元；', main)
-    deal_avg_price = re.search(u'平均成交价为个人(\d+)元、单位(\d+)元；', main)
+    deal_min_price = re.search(u'本期竞价[的]*最低成交价为[：]*个人\W*(\d+)\W*元、单位\W*(\d+)\W*元', main)
+    deal_avg_price = re.search(u'平均成交价为[：]*个人\W*(\d+)\W*元、单位\W*(\d+)\W*元', main)
 
     return {'offer_price_personal0': offer_price.group(1),
             'offer_price_personal1': offer_price.group(3),
@@ -69,9 +74,12 @@ def parse_price(url):
 if __name__ == "__main__":
     ''' parse page test '''
     start_page = "http://xqctk.sztb.gov.cn/gbl/index.html"
-    pp(parse_page(start_page))
+    # pp(parse_page(start_page))
 
     ''' parse content test '''
     # url = "http://xqctk.sztb.gov.cn/gbl/20180725/1532506636656_1.html"
-    url = "http://xqctk.sztb.gov.cn/gbl/20160926/1474879050842_1.html"
+    # url = "http://xqctk.sztb.gov.cn/gbl/20160926/1474879050842_1.html"
+    # url = "http://xqctk.sztb.gov.cn/gbl/20151225/1451031172589_1.html"
+    # url = "http://xqctk.sztb.gov.cn/gbl/20151026/1445850153571_1.html"
+    url = "http://xqctk.sztb.gov.cn/gbl/2015325/1427278924471_1.html"
     pp(parse_price(url))
