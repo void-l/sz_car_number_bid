@@ -1,13 +1,12 @@
 # -*- coding=utf-8 -*-
-import urllib2
+import requests
 from prettyprint import pp
 from bs4 import BeautifulSoup
 import re
 
 
 def get_page_content(url):
-    request = urllib2.Request(url)
-    return urllib2.urlopen(request).read()
+    return requests.get(url).content
 
 
 def parse_content(content):
