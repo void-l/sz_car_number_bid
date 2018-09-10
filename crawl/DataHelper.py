@@ -23,18 +23,18 @@ class BidPrice(object):
     def save(self, it):
         BidPriceObject = leancloud.Object.extend(self.TABLE_NAME)
         bid_price_obj = BidPriceObject()
-        bid_price_obj.set('year', it['year'])
-        bid_price_obj.set('month', it['month'])
+        bid_price_obj.set('year', int(it['year']))
+        bid_price_obj.set('month', int(it['month']))
         bid_price_obj.set('url', it['url'])
 
-        bid_price_obj.set('deal_avg_price_company', it['deal_avg_price_company'])
-        bid_price_obj.set('deal_avg_price_personal', it['deal_avg_price_personal'])
-        bid_price_obj.set('deal_min_price_company', it['deal_min_price_company'])
-        bid_price_obj.set('deal_min_price_personal', it['deal_min_price_personal'])
+        bid_price_obj.set('deal_avg_price_company', int(it['deal_avg_price_company']))
+        bid_price_obj.set('deal_avg_price_personal', int(it['deal_avg_price_personal']))
+        bid_price_obj.set('deal_min_price_company', int(it['deal_min_price_company']))
+        bid_price_obj.set('deal_min_price_personal', int(it['deal_min_price_personal']))
 
-        bid_price_obj.set('offer_price_company0', it['offer_price_company0'])
-        bid_price_obj.set('offer_price_company1', it['offer_price_company1'])
-        bid_price_obj.set('offer_price_personal0', it['offer_price_personal0'])
-        bid_price_obj.set('offer_price_personal1', it['offer_price_personal1'])
+        bid_price_obj.set('offer_price_company0', int(it['offer_price_company0']))
+        bid_price_obj.set('offer_price_company1', int(it['offer_price_company1']))
+        bid_price_obj.set('offer_price_personal0', int(it['offer_price_personal0']))
+        bid_price_obj.set('offer_price_personal1', int(it['offer_price_personal1']))
 
         bid_price_obj.save()
